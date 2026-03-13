@@ -1,0 +1,13 @@
+[package]
+name = "refactory-shadow-decimal"
+version = "0.1.0"
+edition = "2021"
+license = "Apache-2.0"
+
+[lib]
+name = "shadow_decimal"
+crate-type = ["cdylib"]
+
+[dependencies]
+pyo3.workspace = true
+rust_decimal = "1"

@@ -1,0 +1,35 @@
+[build-system]
+requires = ["maturin>=1.0,<2.0"]
+build-backend = "maturin"
+
+[project]
+name = "refactory-shadows"
+version = "0.1.0"
+description = "Python shadow libraries — API-identical Rust-backed wrappers for the Refactory pipeline"
+requires-python = ">=3.10"
+license = { text = "Apache-2.0" }
+dependencies = [
+    "refactory-shadow-datetime",
+    "refactory-shadow-re",
+    "refactory-shadow-json",
+    "refactory-shadow-hashlib",
+    "refactory-shadow-decimal",
+    "refactory-shadow-collections",
+    "refactory-shadow-math",
+    "refactory-shadow-itertools",
+    "refactory-shadow-uuid",
+    "refactory-shadow-base64",
+    "refactory-shadow-csv",
+    "refactory-shadow-struct",
+    "refactory-shadow-urllib",
+    "refactory-shadow-ipaddress",
+    "refactory-shadow-io",
+]
+
+[project.optional-dependencies]
+all = [
+    "refactory-shadow-logging",
+    "refactory-shadow-pathlib",
+    "refactory-shadow-requests",
+    "refactory-shadow-functools",
+]

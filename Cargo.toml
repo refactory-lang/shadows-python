@@ -1,0 +1,26 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/shadow-datetime",
+    "crates/shadow-re",
+    "crates/shadow-json",
+    "crates/shadow-hashlib",
+    "crates/shadow-decimal",
+    "crates/shadow-collections",
+    "crates/shadow-math",
+    "crates/shadow-itertools",
+    "crates/shadow-uuid",
+    "crates/shadow-base64",
+    "crates/shadow-csv",
+    "crates/shadow-struct",
+    "crates/shadow-urllib",
+    "crates/shadow-ipaddress",
+    "crates/shadow-io",
+    "crates/shadow-logging",
+    "crates/shadow-pathlib",
+    "crates/shadow-requests",
+    "crates/shadow-functools",
+]
+
+[workspace.dependencies]
+pyo3 = { version = "0.22", features = ["extension-module"] }

@@ -1,0 +1,13 @@
+[package]
+name = "refactory-shadow-struct"
+version = "0.1.0"
+edition = "2021"
+license = "Apache-2.0"
+
+[lib]
+name = "shadow_struct"
+crate-type = ["cdylib"]
+
+[dependencies]
+pyo3.workspace = true
+byteorder = "1"

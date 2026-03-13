@@ -1,0 +1,13 @@
+[package]
+name = "refactory-shadow-itertools"
+version = "0.1.0"
+edition = "2021"
+license = "Apache-2.0"
+
+[lib]
+name = "shadow_itertools"
+crate-type = ["cdylib"]
+
+[dependencies]
+pyo3.workspace = true
+itertools = "0.13"

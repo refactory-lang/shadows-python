@@ -1,0 +1,15 @@
+[package]
+name = "refactory-shadow-hashlib"
+version = "0.1.0"
+edition = "2021"
+license = "Apache-2.0"
+
+[lib]
+name = "shadow_hashlib"
+crate-type = ["cdylib"]
+
+[dependencies]
+pyo3.workspace = true
+sha2 = "0.10"
+md-5 = "0.10"
+digest = "0.10"
