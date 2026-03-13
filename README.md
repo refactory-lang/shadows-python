@@ -1,3 +1,7 @@
+<p align="center">
+  <a href="https://github.com/refactory-lang"><img src="https://raw.githubusercontent.com/refactory-lang/.github/main/assets/refactory-logo.svg" alt="Refactory" width="300"></a>
+</p>
+
 # shadows-python
 
 Python shadow libraries for the Refactory pipeline. API-identical wrappers for Python standard library modules, backed by target-language implementations.
