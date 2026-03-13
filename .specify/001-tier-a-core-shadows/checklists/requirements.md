@@ -1,86 +1,127 @@
-# Requirements Checklist: Tier A Core Python Shadow Libraries
+# Requirements Checklist: Tier A Core Shadow Libraries
 
 **Feature Branch**: `001-tier-a-core-shadows`
 **Last Updated**: 2026-03-13
 
-## R1: PyO3 crate per shadow module
+## Functional Requirements
 
-- [ ] `shadow-datetime` crate compiles as `#[pymodule]` via maturin
-- [ ] `shadow-datetime` exposes `datetime`, `date`, `time`, `timedelta`, `timezone` classes
-- [ ] `shadow-datetime` supports `now()`, `utcnow()`, `fromtimestamp()`, `strptime()`, `strftime()`, `isoformat()`, `replace()`, timedelta arithmetic
-- [ ] `shadow-datetime` uses `chrono` as its Rust backend
-- [ ] `shadow-re` crate compiles as `#[pymodule]` via maturin
-- [ ] `shadow-re` exposes `compile`, `search`, `match`, `fullmatch`, `findall`, `finditer`, `sub`, `subn`, `split`, `escape`, `purge`
-- [ ] `shadow-re` exposes `Match` object with `group`, `groups`, `groupdict`, `start`, `end`, `span`
-- [ ] `shadow-re` supports flags: `IGNORECASE`, `MULTILINE`, `DOTALL`, `VERBOSE`, `ASCII`, `UNICODE`
-- [ ] `shadow-re` uses `regex` as its Rust backend
-- [ ] `shadow-json` crate compiles as `#[pymodule]` via maturin
-- [ ] `shadow-json` exposes `dumps`, `loads`, `dump`, `load`
-- [ ] `shadow-json` supports encoder kwargs: `sort_keys`, `indent`, `ensure_ascii`, `default`, `separators`, `cls`
-- [ ] `shadow-json` supports decoder kwargs: `object_hook`, `object_pairs_hook`, `parse_float`, `parse_int`, `cls`
-- [ ] `shadow-json` raises `JSONDecodeError` for malformed input
-- [ ] `shadow-json` uses `serde_json` as its Rust backend
-- [ ] `shadow-hashlib` crate compiles as `#[pymodule]` via maturin
-- [ ] `shadow-hashlib` exposes `md5`, `sha1`, `sha224`, `sha256`, `sha384`, `sha512`, `new`
-- [ ] `shadow-hashlib` hash objects support `update`, `digest`, `hexdigest`, `copy`
-- [ ] `shadow-hashlib` hash objects expose `name`, `digest_size`, `block_size` attributes
-- [ ] `shadow-hashlib` uses `sha2` and `md-5` as its Rust backends
-- [ ] `shadow-decimal` crate compiles as `#[pymodule]` via maturin
-- [ ] `shadow-decimal` exposes `Decimal` constructor (from string, int, float, tuple)
-- [ ] `shadow-decimal` supports arithmetic operators: `+`, `-`, `*`, `/`, `//`, `%`, `**`
-- [ ] `shadow-decimal` supports `quantize`, `normalize`, `to_eng_string`, `as_tuple`, `compare`, `sqrt`, `ln`, `log10`, `exp`
-- [ ] `shadow-decimal` exposes rounding constants: `ROUND_HALF_UP`, `ROUND_HALF_DOWN`, `ROUND_CEILING`, `ROUND_FLOOR`, `ROUND_HALF_EVEN`
-- [ ] `shadow-decimal` supports `getcontext()` / `setcontext()` for precision and rounding mode
-- [ ] `shadow-decimal` uses `rust_decimal` as its Rust backend
-- [ ] All five crates compile on Python 3.10+
-- [ ] All five crates build on Linux, macOS (arm64, x86_64), and Windows
+### shadow-datetime (FR-001)
+- [ ] PyO3 module `shadow_datetime` compiles and is importable
+- [ ] `date` class with constructor `date(year, month, day)` and attributes `year`, `month`, `day`
+- [ ] `date.today()`, `date.fromtimestamp()`, `date.fromisoformat()` class methods
+- [ ] `date.isoformat()`, `date.strftime()`, `date.weekday()`, `date.isoweekday()` instance methods
+- [ ] `time` class with constructor `time(hour, minute, second, microsecond, tzinfo)` and all attributes
+- [ ] `datetime` class with full constructor and all attributes
+- [ ] `datetime.now()`, `datetime.utcnow()`, `datetime.today()`, `datetime.fromtimestamp()` class methods
+- [ ] `datetime.fromisoformat()`, `datetime.strptime()` parsing class methods
+- [ ] `datetime.strftime()`, `datetime.isoformat()`, `datetime.timestamp()` instance methods
+- [ ] `timedelta` class with constructor and arithmetic (`+`, `-`, `*`, `//`, `%`)
+- [ ] `datetime + timedelta` and `datetime - datetime` arithmetic
+- [ ] `timezone` class with `timezone.utc` and `timezone(offset)` constructor
+- [ ] `MINYEAR` and `MAXYEAR` constants
+- [ ] Comparison operators (`<`, `<=`, `==`, `!=`, `>=`, `>`) on all types
+- [ ] `str()` and `repr()` output matches CPython format
 
-## R2: Import hook
+### shadow-re (FR-002)
+- [ ] PyO3 module `shadow_re` compiles and is importable
+- [ ] `compile(pattern, flags=0)` returns a Pattern object
+- [ ] `match(pattern, string, flags=0)` returns Match or None
+- [ ] `search(pattern, string, flags=0)` returns Match or None
+- [ ] `findall(pattern, string, flags=0)` returns list of strings/tuples
+- [ ] `finditer(pattern, string, flags=0)` returns iterator of Match objects
+- [ ] `sub(pattern, repl, string, count=0, flags=0)` returns string
+- [ ] `subn(pattern, repl, string, count=0, flags=0)` returns (string, count)
+- [ ] `split(pattern, string, maxsplit=0, flags=0)` returns list
+- [ ] `escape(pattern)` returns escaped string
+- [ ] Match object `.group()`, `.groups()`, `.groupdict()`, `.span()`, `.start()`, `.end()`
+- [ ] Named groups via `(?P<name>...)` syntax
+- [ ] Flag constants: `IGNORECASE`, `MULTILINE`, `DOTALL`, `VERBOSE`, `ASCII`, `UNICODE`
+- [ ] `re.error` exception raised for invalid patterns
+- [ ] Pattern object `.pattern`, `.flags`, `.groups`, `.groupindex` attributes
 
-- [ ] `hook/__init__.py` implements `install()` function
-- [ ] `install()` registers a `sys.meta_path` finder intercepting `datetime`, `re`, `json`, `hashlib`, `decimal`
-- [ ] `hook/__init__.py` implements `uninstall()` function
-- [ ] `uninstall()` removes the finder and restores original CPython modules
-- [ ] `install()` is idempotent — calling it twice does not duplicate finders
-- [ ] `hook/_registry.py` maps stdlib module names to shadow package import paths
-- [ ] Registry design supports adding Tier B shadows without modifying hook logic
+### shadow-json (FR-003)
+- [ ] PyO3 module `shadow_json` compiles and is importable
+- [ ] `dumps(obj)` serializes Python objects to JSON string
+- [ ] `dumps()` supports `indent` (int or None)
+- [ ] `dumps()` supports `sort_keys` (bool)
+- [ ] `dumps()` supports `separators` (tuple)
+- [ ] `dumps()` supports `default` (callable)
+- [ ] `dumps()` supports `ensure_ascii` (bool)
+- [ ] `loads(s)` deserializes JSON string to Python objects
+- [ ] `loads()` supports `object_hook` (callable)
+- [ ] `loads()` supports `parse_float` (callable)
+- [ ] `dump(obj, fp)` writes to file-like object
+- [ ] `load(fp)` reads from file-like object
+- [ ] `JSONDecodeError` exception with `msg`, `doc`, `pos`, `lineno`, `colno` attributes
+- [ ] Correct type mapping: JSON null -> None, true/false -> bool, number -> int/float, string -> str, array -> list, object -> dict
 
-## R3: Equivalence test suite
+### shadow-hashlib (FR-004)
+- [ ] PyO3 module `shadow_hashlib` compiles and is importable
+- [ ] `sha256()` constructor with optional `data` argument
+- [ ] `sha512()` constructor with optional `data` argument
+- [ ] `sha384()` constructor with optional `data` argument
+- [ ] `sha224()` constructor with optional `data` argument
+- [ ] `sha1()` constructor with optional `data` argument
+- [ ] `md5()` constructor with optional `data` argument
+- [ ] `new(name, data=b"")` dynamic constructor
+- [ ] Hash object `.update(data)` for incremental hashing
+- [ ] Hash object `.digest()` returns bytes
+- [ ] Hash object `.hexdigest()` returns hex string
+- [ ] Hash object `.copy()` returns independent copy
+- [ ] Hash object `.name` attribute
+- [ ] Hash object `.digest_size` attribute
+- [ ] Hash object `.block_size` attribute
+- [ ] `algorithms_available` set attribute
+- [ ] `algorithms_guaranteed` set attribute
 
-- [ ] `rust/tests/equivalence/test_datetime.py` exists and covers Scenario 1 operations
-- [ ] `rust/tests/equivalence/test_re.py` exists and covers Scenario 2 operations
-- [ ] `rust/tests/equivalence/test_json.py` exists and covers Scenario 3 operations
-- [ ] `rust/tests/equivalence/test_hashlib.py` exists and covers Scenario 4 operations
-- [ ] `rust/tests/equivalence/test_decimal.py` exists and covers Scenario 5 operations
-- [ ] Each test file runs identical operations through CPython stdlib and shadow implementation
-- [ ] Each test file asserts identical return values (with floating-point tolerance where needed)
-- [ ] Each test file asserts identical exception types for error cases
-- [ ] Tests use `@pytest.mark.parametrize` for combinatorial coverage
-- [ ] All tests pass via `pytest rust/tests/equivalence/` with `conftest.py` activating the hook
+### shadow-decimal (FR-005)
+- [ ] PyO3 module `shadow_decimal` compiles and is importable
+- [ ] `Decimal(value)` constructor from string, int, float, tuple
+- [ ] Arithmetic operators: `+`, `-`, `*`, `/`, `//`, `%`, `**`
+- [ ] Comparison operators: `<`, `<=`, `==`, `!=`, `>=`, `>`
+- [ ] `quantize(exp, rounding=None)` method
+- [ ] `to_eng_string()` method
+- [ ] `is_nan()`, `is_infinite()`, `is_zero()`, `is_signed()` predicates
+- [ ] `as_tuple()` returning DecimalTuple(sign, digits, exponent)
+- [ ] `Decimal("inf")`, `Decimal("-inf")`, `Decimal("NaN")` special values
+- [ ] `getcontext()` and `setcontext()` for precision/rounding control
+- [ ] `localcontext()` context manager
+- [ ] `str()` and `repr()` output matches CPython format
+- [ ] Exception classes: `InvalidOperation`, `DivisionByZero`, `Overflow`
 
-## R4: Build and packaging
+### Import Hook (FR-006, FR-007, FR-010)
+- [ ] `activate(tiers="A")` intercepts all 5 Tier A module imports
+- [ ] `deactivate()` restores original import behavior
+- [ ] `from datetime import datetime` works (attribute-level access)
+- [ ] `conftest_plugin.py` activates hook automatically during pytest
+- [ ] Fallback to CPython stdlib with `warnings.warn()` when extension not available
+- [ ] No corruption of `sys.modules` after activate/deactivate cycle
 
-- [ ] `maturin develop` builds all five crates into the local virtualenv
-- [ ] `maturin build --release` produces wheel artifacts without errors
-- [ ] `pyproject.toml` declares workspace and all five extension modules
-- [ ] CI pipeline runs `maturin build`
-- [ ] CI pipeline runs `pytest rust/tests/equivalence/`
-- [ ] CI pipeline runs `cargo test`
+### Build (FR-008)
+- [ ] `maturin develop` succeeds for shadow-datetime
+- [ ] `maturin develop` succeeds for shadow-re
+- [ ] `maturin develop` succeeds for shadow-json
+- [ ] `maturin develop` succeeds for shadow-hashlib
+- [ ] `maturin develop` succeeds for shadow-decimal
+- [ ] All 5 crates compile without warnings in release mode
 
-## R5: API surface coverage
+### Equivalence Tests (FR-009)
+- [ ] `test_datetime_equiv.py` exists and covers constructors, arithmetic, formatting, parsing, timezones
+- [ ] `test_re_equiv.py` exists and covers compile, match, search, findall, sub, split, named groups, flags
+- [ ] `test_json_equiv.py` exists and covers dumps/loads with all option combinations, edge cases, errors
+- [ ] `test_hashlib_equiv.py` exists and covers all algorithms, incremental hashing, digest/hexdigest, copy
+- [ ] `test_decimal_equiv.py` exists and covers arithmetic, rounding, special values, context, string conversion
+- [ ] Each test compares shadow output against CPython stdlib output
+- [ ] All equivalence tests pass
 
-- [ ] shadow-datetime covers all methods listed in R5 of the spec
-- [ ] shadow-re covers all functions, Match methods, and flags listed in R5 of the spec
-- [ ] shadow-json covers all functions, kwargs, and error types listed in R5 of the spec
-- [ ] shadow-hashlib covers all hash algorithms, methods, and attributes listed in R5 of the spec
-- [ ] shadow-decimal covers all constructors, operators, methods, and context functions listed in R5 of the spec
+## Success Criteria Verification
 
-## Success Criteria
-
-- [ ] After `hook.install()`, `import datetime` loads shadow-datetime (verified via `__shadow__` attribute)
-- [ ] `pytest rust/tests/equivalence/` exits 0 with all tests green
-- [ ] `maturin build --release` produces wheels without errors
-- [ ] `cargo test --workspace` passes all Rust-side unit tests
-- [ ] Existing Python code runs without modification under the shadow hook
-- [ ] `hook.uninstall()` restores CPython stdlib modules
-- [ ] Shadow implementations are not slower than CPython stdlib for covered operations
+- [ ] SC-001: `type(datetime.datetime).__module__` contains `shadow` when hook active
+- [ ] SC-002: `re.search(r'\d+', '123').group()` returns `'123'` via shadow
+- [ ] SC-003: `json.dumps({"a": 1})` produces correct output via shadow
+- [ ] SC-004: `hashlib.sha256(b"test").hexdigest()` matches known hash via shadow
+- [ ] SC-005: `str(Decimal("0.1") + Decimal("0.2"))` equals `"0.3"` via shadow
+- [ ] SC-006: All 5 crates build with `maturin develop` in under 120 seconds
+- [ ] SC-007: `pytest rust/tests/equivalence/` passes with zero failures
+- [ ] SC-008: activate/deactivate cycle leaves sys.modules/sys.meta_path clean
+- [ ] SC-009: Import time overhead is under 50ms per shadow module
