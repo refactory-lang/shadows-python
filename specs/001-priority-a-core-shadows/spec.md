@@ -1,6 +1,6 @@
 # Feature Specification: Priority A Core Shadow Libraries
 
-**Feature Branch**: `001-tier-a-core-shadows`
+**Feature Branch**: `001-priority-a-core-shadows`
 **Created**: 2026-03-13
 **Status**: Draft
 **Input**: User description: "Implement Priority A (Core) Python shadow libraries - shadow-datetime (chrono), shadow-re (regex), shadow-json (serde_json), shadow-hashlib (sha2), shadow-decimal (rust_decimal) with PyO3 bindings and CPython equivalence tests"

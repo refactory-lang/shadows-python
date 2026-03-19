@@ -1,6 +1,6 @@
 # Requirements Checklist: Priority A Core Shadow Libraries
 
-**Feature Branch**: `001-tier-a-core-shadows`
+**Feature Branch**: `001-priority-a-core-shadows`
 **Last Updated**: 2026-03-13
 
 ## Functional Requirements

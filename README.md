@@ -31,7 +31,7 @@ shadows-python/
 │   │   ├── shadow-re/              # re → regex
 │   │   ├── shadow-json/            # json → serde_json
 │   │   └── ...
-│   ├── tier0-rules/                # ast-grep import rewrite rules
+│   ├── stage0-rules/               # ast-grep import rewrite rules
 │   └── tests/equivalence/          # CPython ↔ Shadow equivalence tests
 ├── go/                             # Target: Go (future)
 └── README.md
