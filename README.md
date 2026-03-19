@@ -10,11 +10,11 @@ Python shadow libraries for the Refactory pipeline. API-identical wrappers for P
 
 ## Why Shadow Libraries?
 
-In a traditional translation pipeline, an API mapping database translates between independent implementations: `datetime` → `chrono`, `re` → `regex`. Each entry is an *assumed equivalence* that no test verifies. Shadow libraries eliminate this:
+In a traditional transformation pipeline, an API mapping database translates between independent implementations: `datetime` → `chrono`, `re` → `regex`. Each entry is an *assumed equivalence* that no test verifies. Shadow libraries eliminate this:
 
 1. **Development:** Developer writes `from datetime import datetime` — vanilla Python.
 2. **Testing:** Import hook loads the target-language implementation via FFI. Tests exercise real compiled code.
-3. **Translation:** Tier 0 rewrites imports. Tier 1 does a module-path rewrite. Zero semantic translation.
+3. **Translation:** Stage 0 rewrites imports. Stage 1 does a module-path rewrite. Zero semantic translation.
 
 ## Structure
 
