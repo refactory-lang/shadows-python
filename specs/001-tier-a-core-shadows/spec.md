@@ -1,9 +1,9 @@
-# Feature Specification: Tier A Core Shadow Libraries
+# Feature Specification: Priority A Core Shadow Libraries
 
 **Feature Branch**: `001-tier-a-core-shadows`
 **Created**: 2026-03-13
 **Status**: Draft
-**Input**: User description: "Implement Tier A (Core) Python shadow libraries - shadow-datetime (chrono), shadow-re (regex), shadow-json (serde_json), shadow-hashlib (sha2), shadow-decimal (rust_decimal) with PyO3 bindings and CPython equivalence tests"
+**Input**: User description: "Implement Priority A (Core) Python shadow libraries - shadow-datetime (chrono), shadow-re (regex), shadow-json (serde_json), shadow-hashlib (sha2), shadow-decimal (rust_decimal) with PyO3 bindings and CPython equivalence tests"
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -11,7 +11,7 @@
 
 A developer writes `import datetime` in their Python code. With the shadow hook activated (via `conftest.py` or explicit `activate()` call), the import is intercepted and the Rust-backed `shadow_datetime` module (powered by `chrono`) is loaded instead of CPython's `datetime`. The developer uses `datetime.datetime.now()`, `datetime.timedelta(days=5)`, `datetime.date.today()`, and all other standard datetime APIs exactly as before, with identical return types and behavior.
 
-**Why this priority**: `datetime` is the most widely used stdlib module in the Tier A set. It exercises the full PyO3 class hierarchy (date, time, datetime, timedelta, timezone) and validates that the import hook mechanism works end-to-end.
+**Why this priority**: `datetime` is the most widely used stdlib module in the Priority A set. It exercises the full PyO3 class hierarchy (date, time, datetime, timedelta, timezone) and validates that the import hook mechanism works end-to-end.
 
 **Independent Test**: Can be fully tested by activating the shadow hook, running `import datetime`, and verifying that `datetime.datetime.now()` returns a value equivalent to CPython's `datetime.datetime.now()` within a tolerance window. Delivers value as a standalone proof that Rust-backed shadows can transparently replace CPython modules.
 
@@ -94,7 +94,7 @@ A developer writes `from decimal import Decimal` and performs `Decimal("0.1") + 
 
 ### User Story 6 - Equivalence test suite validates shadow == CPython (Priority: P1)
 
-A developer or CI system runs `pytest rust/tests/equivalence/` which executes a comprehensive test suite comparing shadow module outputs against CPython module outputs for all Tier A libraries. Each test calls the same API on both the shadow and CPython implementations and asserts the results are equal. The test suite uses the conftest plugin to activate/deactivate the shadow hook as needed.
+A developer or CI system runs `pytest rust/tests/equivalence/` which executes a comprehensive test suite comparing shadow module outputs against CPython module outputs for all Priority A libraries. Each test calls the same API on both the shadow and CPython implementations and asserts the results are equal. The test suite uses the conftest plugin to activate/deactivate the shadow hook as needed.
 
 **Why this priority**: Without equivalence tests, there is no verifiable guarantee that the shadows behave identically to CPython. This is the primary quality gate for the entire shadow library approach.
 
@@ -138,9 +138,9 @@ A developer or CI system runs `pytest rust/tests/equivalence/` which executes a 
 
 - **FR-007**: The `conftest_plugin.py` MUST activate the shadow hook automatically when pytest is run, allowing developers to control tiers via pytest configuration (`refactory_shadow_tiers` ini option).
 
-- **FR-008**: Each of the 5 Tier A crates MUST build successfully with `maturin develop` from the `rust/` workspace root, producing importable Python extension modules.
+- **FR-008**: Each of the 5 Priority A crates MUST build successfully with `maturin develop` from the `rust/` workspace root, producing importable Python extension modules.
 
-- **FR-009**: An equivalence test suite MUST exist at `rust/tests/equivalence/` with one test file per Tier A crate (`test_datetime_equiv.py`, `test_re_equiv.py`, `test_json_equiv.py`, `test_hashlib_equiv.py`, `test_decimal_equiv.py`). Each test file MUST compare shadow module output against CPython stdlib output for a comprehensive set of API calls.
+- **FR-009**: An equivalence test suite MUST exist at `rust/tests/equivalence/` with one test file per Priority A crate (`test_datetime_equiv.py`, `test_re_equiv.py`, `test_json_equiv.py`, `test_hashlib_equiv.py`, `test_decimal_equiv.py`). Each test file MUST compare shadow module output against CPython stdlib output for a comprehensive set of API calls.
 
 - **FR-010**: When a shadow module's compiled extension is unavailable (not built), the import hook MUST fall back to CPython's stdlib module and emit a warning via `warnings.warn()` rather than raising an ImportError.
 
@@ -149,7 +149,7 @@ A developer or CI system runs `pytest rust/tests/equivalence/` which executes a 
 - **Shadow Module**: A compiled Rust extension (`.so` / `.dylib` / `.pyd`) that exposes the same Python API as a CPython stdlib module. Built via PyO3/maturin as a `cdylib` crate.
 - **Import Hook (`ShadowImportHook`)**: A `sys.meta_path` finder/loader that intercepts stdlib imports and redirects them to shadow modules. Configured with a set of active tiers.
 - **Equivalence Test**: A pytest test that calls the same API on both the shadow implementation and CPython's stdlib, asserting identical results. Tests are parametrized across input variations.
-- **Tier**: A grouping of shadow modules by complexity and risk. Tier A (Core) includes datetime, re, json, hashlib, and decimal.
+- **Tier**: A grouping of shadow modules by complexity and risk. Priority A (Core) includes datetime, re, json, hashlib, and decimal.
 
 ## Success Criteria *(mandatory)*
 
@@ -160,7 +160,7 @@ A developer or CI system runs `pytest rust/tests/equivalence/` which executes a 
 - **SC-003**: `import json` loads the serde_json-backed shadow implementation, verified by `json.dumps({"a": 1}) == '{"a": 1}'`.
 - **SC-004**: `import hashlib` loads the sha2-backed shadow implementation, verified by `hashlib.sha256(b"test").hexdigest()` matching the known hash.
 - **SC-005**: `from decimal import Decimal` loads the rust_decimal-backed shadow implementation, verified by `str(Decimal("0.1") + Decimal("0.2")) == "0.3"`.
-- **SC-006**: All 5 Tier A crates build successfully with `maturin develop` in under 120 seconds on a standard development machine.
-- **SC-007**: The equivalence test suite (`pytest rust/tests/equivalence/`) passes with zero failures across all 5 Tier A crate test files.
+- **SC-006**: All 5 Priority A crates build successfully with `maturin develop` in under 120 seconds on a standard development machine.
+- **SC-007**: The equivalence test suite (`pytest rust/tests/equivalence/`) passes with zero failures across all 5 Priority A crate test files.
 - **SC-008**: The shadow import hook activates and deactivates cleanly without corrupting `sys.modules` or `sys.meta_path` state, verified by `deactivate()` restoring original import behavior.
 - **SC-009**: No shadow module introduces a regression in import time greater than 50ms compared to CPython's stdlib module, measured via `time.time()` around import statements.

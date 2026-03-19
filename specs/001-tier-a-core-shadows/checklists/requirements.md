@@ -1,4 +1,4 @@
-# Requirements Checklist: Tier A Core Shadow Libraries
+# Requirements Checklist: Priority A Core Shadow Libraries
 
 **Feature Branch**: `001-tier-a-core-shadows`
 **Last Updated**: 2026-03-13
@@ -90,7 +90,7 @@
 - [ ] Exception classes: `InvalidOperation`, `DivisionByZero`, `Overflow`
 
 ### Import Hook (FR-006, FR-007, FR-010)
-- [ ] `activate(tiers="A")` intercepts all 5 Tier A module imports
+- [ ] `activate(tiers="A")` intercepts all 5 Priority A module imports
 - [ ] `deactivate()` restores original import behavior
 - [ ] `from datetime import datetime` works (attribute-level access)
 - [ ] `conftest_plugin.py` activates hook automatically during pytest

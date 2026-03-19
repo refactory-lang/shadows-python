@@ -39,7 +39,7 @@ shadows-python/
 
 ## Shadow Library Inventory (Rust target)
 
-### Tier A — Core
+### Priority A — Core
 
 | Package | Python Module | Rust Crate |
 |---------|--------------|------------|
@@ -49,7 +49,7 @@ shadows-python/
 | `shadow-hashlib` | `hashlib` | `sha2` + `md-5` |
 | `shadow-decimal` | `decimal` | `rust_decimal` |
 
-### Tier B — Data Structures
+### Priority B — Data Structures
 
 | Package | Python Module | Rust Crate |
 |---------|--------------|------------|
@@ -57,7 +57,7 @@ shadows-python/
 | `shadow-math` | `math` | `std` + `num-traits` |
 | `shadow-itertools` | `itertools` | `itertools` |
 
-### Tier C — Utilities
+### Priority C — Utilities
 
 | Package | Python Module | Rust Crate |
 |---------|--------------|------------|
@@ -69,7 +69,7 @@ shadows-python/
 | `shadow-ipaddress` | `ipaddress` | `std::net` |
 | `shadow-io` | `io` | `std::io::Cursor` |
 
-### Tier D — General
+### Priority D — General
 
 | Package | Python Module | Rust Crate |
 |---------|--------------|------------|
