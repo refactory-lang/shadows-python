@@ -6,8 +6,8 @@ Activated by a single line in conftest.py or via the pytest plugin.
 
 Usage:
     from refactory_shadows.hook import activate
-    activate()  # Default: Tiers A-C (Ferrum-safe, no I/O)
-    activate(tiers="ABCD")  # All tiers (general Refactory)
+    activate()  # Default: Priorities A-C (Ferrum-safe, no I/O)
+    activate(priorities="ABCD")  # All priorities (general Refactory)
 """
 
 import sys
@@ -15,17 +15,17 @@ import importlib
 
 # Full shadow map — all 19 libraries
 _SHADOW_MAP = {
-    # Tier A — Core
+    # Priority A — Core
     "datetime":     "refactory_shadows.chrono",
     "re":           "refactory_shadows.regex",
     "json":         "refactory_shadows.serde_json",
     "hashlib":      "refactory_shadows.digest",
     "decimal":      "refactory_shadows.rust_decimal",
-    # Tier B — Data Structures
+    # Priority B — Data Structures
     "collections":  "refactory_shadows.collections",
     "math":         "refactory_shadows.math",
     "itertools":    "refactory_shadows.itertools",
-    # Tier C — Utilities
+    # Priority C — Utilities
     "uuid":         "refactory_shadows.uuid",
     "base64":       "refactory_shadows.base64",
     "csv":          "refactory_shadows.csv",
@@ -33,7 +33,7 @@ _SHADOW_MAP = {
     "urllib.parse":  "refactory_shadows.url",
     "ipaddress":    "refactory_shadows.ipaddress",
     "io":           "refactory_shadows.io",
-    # Tier D — Refactory-General
+    # Priority D — Refactory-General
     "logging":      "refactory_shadows.logging",
     "pathlib":      "refactory_shadows.pathlib",
     "os.path":      "refactory_shadows.pathlib",
@@ -41,7 +41,7 @@ _SHADOW_MAP = {
     "functools":    "refactory_shadows.functools",
 }
 
-_TIER_MODULES = {
+_PRIORITY_MODULES = {
     "A": {"datetime", "re", "json", "hashlib", "decimal"},
     "B": {"collections", "math", "itertools"},
     "C": {"uuid", "base64", "csv", "struct", "urllib.parse", "ipaddress", "io"},
@@ -69,17 +69,17 @@ class ShadowImportHook:
         return shadow_mod
 
 
-def activate(tiers: str = "ABC"):
+def activate(priorities: str = "ABC"):
     """
     Activate shadow library loading.
 
     Args:
-        tiers: Which tiers to activate. Default "ABC" (Ferrum-safe).
-               Use "ABCD" for general Refactory use (includes I/O libraries).
+        priorities: Which priorities to activate. Default "ABC" (Ferrum-safe).
+                    Use "ABCD" for general Refactory use (includes I/O libraries).
     """
     active_modules: set[str] = set()
-    for tier in tiers.upper():
-        active_modules |= _TIER_MODULES.get(tier, set())
+    for p in priorities.upper():
+        active_modules |= _PRIORITY_MODULES.get(p, set())
 
     if not any(isinstance(h, ShadowImportHook) for h in sys.meta_path):
         sys.meta_path.insert(0, ShadowImportHook(active_modules))
